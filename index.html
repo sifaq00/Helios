@@ -50,7 +50,7 @@
         "World Monitor App",
         "WM Intelligence"
       ],
-      "url": "https://www.worldmonitor.app/dashboard",
+      "url": "https://helios.app/dashboard",
       "description": "Open-source real-time global intelligence dashboard aggregating conflicts, military movements, markets, infrastructure, and geopolitical data. Used by 2M+ people across 190+ countries. Featured in WIRED.",
       "applicationCategory": "SecurityApplication",
       "operatingSystem": "Web, Windows, macOS, Linux",
@@ -61,7 +61,7 @@
           "price": "0",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
-          "url": "https://www.worldmonitor.app/pro#pricing",
+          "url": "https://helios.app/pro#pricing",
           "description": "Core dashboard panels, Global news feed, Earthquake & weather alerts, Basic map view, 3 dashboard tabs"
         },
         {
@@ -70,7 +70,7 @@
           "price": "39.99",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
-          "url": "https://www.worldmonitor.app/pro#pricing",
+          "url": "https://helios.app/pro#pricing",
           "description": "Everything in Free, AI stock analysis & backtesting, Daily market briefs, Military & geopolitical tracking, Custom widget builder, 10 custom dashboards (vs 3), MCP + SDK access for Claude Desktop & other AI clients (50 calls/day), Priority data refresh, Personal license, 1 named user",
           "priceSpecification": {
             "@type": "UnitPriceSpecification",
@@ -85,7 +85,7 @@
           "price": "359.99",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
-          "url": "https://www.worldmonitor.app/pro#pricing",
+          "url": "https://helios.app/pro#pricing",
           "description": "",
           "priceSpecification": {
             "@type": "UnitPriceSpecification",
@@ -144,18 +144,18 @@
       "@type": "WebSite",
       "name": "World Monitor",
       "alternateName": "WorldMonitor",
-      "url": "https://www.worldmonitor.app/",
+      "url": "https://helios.app/",
       "description": "Real-time global intelligence dashboard — live news, markets, military tracking, infrastructure monitoring, and geopolitical data.",
       "publisher": {
         "@type": "Organization",
         "name": "World Monitor",
-        "url": "https://www.worldmonitor.app/"
+        "url": "https://helios.app/"
       },
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://www.worldmonitor.app/dashboard?q={search_term_string}"
+          "urlTemplate": "https://helios.app/dashboard?q={search_term_string}"
         },
         "query-input": "required name=search_term_string"
       },
@@ -170,6 +170,8 @@
       in src/services/analytics.ts (UMAMI_DOMAINS) — the single source of truth.
     -->
 
+    <!-- Olive 101 display font -->
+    <link rel="preload" href="/fonts/Olive101.woff2" as="font" type="font/woff2" crossorigin />
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favico/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favico/favicon-32x32.png" />

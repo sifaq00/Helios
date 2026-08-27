@@ -1,0 +1,18 @@
+/* Olive 101 - CC BY-ND Fonts101 - place woff2/woff/ttf in public/fonts/ */
+@font-face {
+  font-family: 'Olive 101';
+  src: url('/fonts/Olive101.woff2') format('woff2'),
+       url('/fonts/Olive101.woff') format('woff'),
+       url('/fonts/Olive101.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --font-display: 'Olive 101', system-ui, sans-serif;
+}
+/* Apply Olive 101 to branding and headings - ponytail: minimal, only headings */
+.skeleton-brand, .logo, .brand, .panel-title, .skeleton-map-title, .skeleton-panel-title, h1, h2, h3 {
+  font-family: var(--font-display) !important;
+  letter-spacing: 0.2em !important;
+}

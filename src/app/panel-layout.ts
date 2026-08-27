@@ -191,12 +191,12 @@ const DASHBOARD_REFERENCE_LINKS = [
 ] as const;
 
 export const VARIANT_SWITCHER_DASHBOARD_URLS = {
-  full: 'https://worldmonitor.app/dashboard',
-  tech: 'https://tech.worldmonitor.app/dashboard',
-  finance: 'https://finance.worldmonitor.app/dashboard',
-  commodity: 'https://commodity.worldmonitor.app/dashboard',
-  energy: 'https://energy.worldmonitor.app/dashboard',
-  happy: 'https://happy.worldmonitor.app/dashboard',
+  full: 'https://helios.app/dashboard',
+  tech: 'https://tech.helios.app/dashboard',
+  finance: 'https://finance.helios.app/dashboard',
+  commodity: 'https://commodity.helios.app/dashboard',
+  energy: 'https://energy.helios.app/dashboard',
+  happy: 'https://happy.helios.app/dashboard',
 } as const;
 
 export function variantSwitcherHref(
@@ -905,7 +905,7 @@ export class PanelLayoutManager implements AppModule {
     })();
     const bootShellFootprint = import.meta.env.DEV ? captureBootShellFootprint(this.ctx.container) : null;
     const referenceLinksHtml = DASHBOARD_REFERENCE_LINKS.map(({ label, path }) => {
-      const href = this.ctx.isDesktopApp ? `https://www.worldmonitor.app${path}` : path;
+      const href = this.ctx.isDesktopApp ? `https://helios.app${path}` : path;
       return `<a href="${href}" target="_blank" rel="noopener">${label}</a>`;
     }).join('');
 
@@ -1075,10 +1075,10 @@ export class PanelLayoutManager implements AppModule {
         <div class="mobile-menu-divider"></div>
         <div class="mobile-menu-footer-links">
           ${referenceLinksHtml}
-          <a href="${this.ctx.isDesktopApp ? 'https://www.worldmonitor.app/pro#pricing' : '/pro#pricing'}" target="_blank" rel="noopener">Pricing</a>
-          <a href="${this.ctx.isDesktopApp ? 'https://worldmonitor.app/blog/' : 'https://www.worldmonitor.app/blog/'}" target="_blank" rel="noopener">Blog</a>
-          <a href="${this.ctx.isDesktopApp ? 'https://worldmonitor.app/docs' : 'https://www.worldmonitor.app/docs'}" target="_blank" rel="noopener">Docs</a>
-          <a href="https://status.worldmonitor.app/" target="_blank" rel="noopener">Status</a>
+          <a href="${this.ctx.isDesktopApp ? 'https://helios.app/pro#pricing' : '/pro#pricing'}" target="_blank" rel="noopener">Pricing</a>
+          <a href="${this.ctx.isDesktopApp ? 'https://helios.app/blog/' : 'https://helios.app/blog/'}" target="_blank" rel="noopener">Blog</a>
+          <a href="${this.ctx.isDesktopApp ? 'https://helios.app/docs' : 'https://helios.app/docs'}" target="_blank" rel="noopener">Docs</a>
+          <a href="https://status.helios.app/" target="_blank" rel="noopener">Status</a>
         </div>
         <div class="mobile-menu-version">v${__APP_VERSION__}</div>
       </nav>
