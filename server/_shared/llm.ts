@@ -80,7 +80,12 @@ export function getProviderCredentials(
   overrides: ProviderCredentialOverrides = {},
 ): ProviderCredentials | null {
   if (provider === 'ollama') {
-    const baseUrl = process.env.OLLAMA_API_URL;
+    let baseUrl = process.env.OLLAMA_API_URL;
+    if (!baseUrl && process.env.LLM_API_URL) {
+      try {
+        baseUrl = new URL(process.env.LLM_API_URL).origin;
+      } catch {}
+    }
     if (!baseUrl) return null;
 
     if (!isLocalDeployment()) {
@@ -96,12 +101,15 @@ export function getProviderCredentials(
     }
 
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-    const apiKey = process.env.OLLAMA_API_KEY;
+    const apiKey = process.env.OLLAMA_API_KEY || process.env.LLM_API_KEY;
     if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
+    const model = overrides.model || process.env.OLLAMA_MODEL || process.env.LLM_MODEL || 'llama3.1:8b';
+    const apiUrl = process.env.LLM_API_URL || new URL('/v1/chat/completions', baseUrl).toString();
+
     return {
-      apiUrl: new URL('/v1/chat/completions', baseUrl).toString(),
-      model: overrides.model || process.env.OLLAMA_MODEL || 'llama3.1:8b',
+      apiUrl,
+      model,
       headers,
       extraBody: { think: false },
     };

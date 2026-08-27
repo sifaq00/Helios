@@ -159,7 +159,10 @@ export async function summarizeArticle(
     openrouter: 'OPENROUTER_API_KEY not configured',
   };
 
-  const credentials = getProviderCredentials(provider);
+  let credentials = getProviderCredentials(provider);
+  if (!credentials) {
+    credentials = getProviderCredentials('generic') || getProviderCredentials('ollama');
+  }
   if (!credentials) {
     return {
       summary: '',
@@ -286,7 +289,7 @@ export async function summarizeArticle(
               { role: 'user', content: userPrompt },
             ],
             temperature: 0.3,
-            max_tokens: 100,
+            max_tokens: 1024,
             top_p: 0.9,
             ...extraBody,
           }),
