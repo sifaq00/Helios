@@ -775,6 +775,36 @@ const PROVIDER_OVERRIDES = {
     attribution: 'Excluded from the external-provider count: first-party API endpoint.',
     status: 'excluded',
   },
+  'tech.helios.app': {
+    provider: 'Helios web app',
+    license: 'Excluded: Helios own web application',
+    attribution: 'Excluded from the external-provider count: first-party web origin.',
+    status: 'excluded',
+  },
+  'finance.helios.app': {
+    provider: 'Helios web app',
+    license: 'Excluded: Helios own web application',
+    attribution: 'Excluded from the external-provider count: first-party web origin.',
+    status: 'excluded',
+  },
+  'commodity.helios.app': {
+    provider: 'Helios web app',
+    license: 'Excluded: Helios own web application',
+    attribution: 'Excluded from the external-provider count: first-party web origin.',
+    status: 'excluded',
+  },
+  'energy.helios.app': {
+    provider: 'Helios web app',
+    license: 'Excluded: Helios own web application',
+    attribution: 'Excluded from the external-provider count: first-party web origin.',
+    status: 'excluded',
+  },
+  'happy.helios.app': {
+    provider: 'Helios web app',
+    license: 'Excluded: Helios own web application',
+    attribution: 'Excluded from the external-provider count: first-party web origin.',
+    status: 'excluded',
+  },
   'chatgpt.com': {
     provider: 'ChatGPT link',
     license: 'Excluded: documentation/UI link',
@@ -838,13 +868,13 @@ const PROVIDER_OVERRIDES = {
 // a provider-bearing override a separate, explicit lifecycle event instead of
 // something `--write` can silently normalize into the manifest.
 export const PROVIDER_IDENTITY_REVIEW = Object.freeze({
-  sha256: 'ffe1e84353e0a0dbc15bd6691a77baa13b6009580a6b75fdc340b704372778e1',
-  reason: 'Keep Toronto Police Service C4S live-dispatch on services.arcgis.com distinct from Toronto Police Service Open Data on data.tps.ca and www.tps.ca, so live CAD is not catalogued as Open Data / geopolitics. + Helios rebrand: add helios.app/www/api first-party exclusions mirroring worldmonitor.app.',
+  sha256: '1b638ae770f62dc8cc1fe8ee9765d677a721c8b1905bbf78e78c08cfde2c38eb',
+  reason: 'Keep Toronto Police Service C4S live-dispatch on services.arcgis.com distinct from Toronto Police Service Open Data on data.tps.ca and www.tps.ca, so live CAD is not catalogued as Open Data / geopolitics. + Helios rebrand: add helios.app/www/api/tech/finance/commodity/energy/happy first-party exclusions mirroring worldmonitor.app.',
   // A URL cited here is scanned like any other: this file sits inside
   // SOURCE_ROOTS, so citing a host that is not already a registered source
   // invents a provider row for it. The B.C. catalogue URLs above are safe
   // because that host is itself an observed source; parallel.ai is not.
-  reviewReference: 'Issues #7012 and #6682 Toronto safety sources; plus Issue #7000 publisher-centric source catalog; plus Issue #7001, Issue #6437, Issue #6622, Issue #6659, and PR #6447 identity reviews; Helios rebrand helios.app.',
+  reviewReference: 'Issues #7012 and #6682 Toronto safety sources; plus Issue #7000 publisher-centric source catalog; plus Issue #7001, Issue #6437, Issue #6622, Issue #6659, and PR #6447 identity reviews; Helios rebrand helios.app variants.',
 });
 
 export function providerIdentityDigest(providerOverrides = PROVIDER_OVERRIDES) {

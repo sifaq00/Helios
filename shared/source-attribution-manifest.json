@@ -2445,12 +2445,12 @@
       ]
     },
     {
-      "host": "commodity.worldmonitor.app",
-      "provider": "commodity.worldmonitor.app",
+      "host": "commodity.helios.app",
+      "provider": "Helios web app",
       "kind": "structured",
       "observed": true,
-      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
-      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "license": "Excluded: Helios own web application",
+      "attribution": "Excluded from the external-provider count: first-party web origin.",
       "status": "excluded",
       "references": [
         {
@@ -2460,6 +2460,15 @@
           "path": "src/config/variant-meta.ts"
         }
       ]
+    },
+    {
+      "host": "commodity.worldmonitor.app",
+      "provider": "commodity.worldmonitor.app",
+      "kind": "structured",
+      "observed": false,
+      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
+      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "status": "excluded"
     },
     {
       "host": "comtradeapi.un.org",
@@ -3475,12 +3484,12 @@
       ]
     },
     {
-      "host": "energy.worldmonitor.app",
-      "provider": "energy.worldmonitor.app",
+      "host": "energy.helios.app",
+      "provider": "Helios web app",
       "kind": "structured",
       "observed": true,
-      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
-      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "license": "Excluded: Helios own web application",
+      "attribution": "Excluded from the external-provider count: first-party web origin.",
       "status": "excluded",
       "references": [
         {
@@ -3490,6 +3499,15 @@
           "path": "src/config/variant-meta.ts"
         }
       ]
+    },
+    {
+      "host": "energy.worldmonitor.app",
+      "provider": "energy.worldmonitor.app",
+      "kind": "structured",
+      "observed": false,
+      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
+      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "status": "excluded"
     },
     {
       "host": "eng.lsm.lv",
@@ -4109,12 +4127,12 @@
       ]
     },
     {
-      "host": "finance.worldmonitor.app",
-      "provider": "finance.worldmonitor.app",
+      "host": "finance.helios.app",
+      "provider": "Helios web app",
       "kind": "structured",
       "observed": true,
-      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
-      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "license": "Excluded: Helios own web application",
+      "attribution": "Excluded from the external-provider count: first-party web origin.",
       "status": "excluded",
       "references": [
         {
@@ -4124,6 +4142,15 @@
           "path": "src/config/variant-meta.ts"
         }
       ]
+    },
+    {
+      "host": "finance.worldmonitor.app",
+      "provider": "finance.worldmonitor.app",
+      "kind": "structured",
+      "observed": false,
+      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
+      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "status": "excluded"
     },
     {
       "host": "finance.yahoo.com",
@@ -4721,18 +4748,27 @@
       ]
     },
     {
-      "host": "happy.worldmonitor.app",
-      "provider": "happy.worldmonitor.app",
+      "host": "happy.helios.app",
+      "provider": "Helios web app",
       "kind": "structured",
       "observed": true,
-      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
-      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "license": "Excluded: Helios own web application",
+      "attribution": "Excluded from the external-provider count: first-party web origin.",
       "status": "excluded",
       "references": [
         {
           "path": "src/config/variant-meta.ts"
         }
       ]
+    },
+    {
+      "host": "happy.worldmonitor.app",
+      "provider": "happy.worldmonitor.app",
+      "kind": "structured",
+      "observed": false,
+      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
+      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "status": "excluded"
     },
     {
       "host": "havanatimes.org",
@@ -4788,6 +4824,9 @@
       "attribution": "Excluded from the external-provider count: first-party web origin.",
       "status": "excluded",
       "references": [
+        {
+          "path": "src/app/panel-layout.ts"
+        },
         {
           "path": "src/config/variant-meta.ts"
         }
@@ -8746,12 +8785,12 @@
       ]
     },
     {
-      "host": "tech.worldmonitor.app",
-      "provider": "tech.worldmonitor.app",
+      "host": "tech.helios.app",
+      "provider": "Helios web app",
       "kind": "structured",
       "observed": true,
-      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
-      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "license": "Excluded: Helios own web application",
+      "attribution": "Excluded from the external-provider count: first-party web origin.",
       "status": "excluded",
       "references": [
         {
@@ -8761,6 +8800,15 @@
           "path": "src/config/variant-meta.ts"
         }
       ]
+    },
+    {
+      "host": "tech.worldmonitor.app",
+      "provider": "tech.worldmonitor.app",
+      "kind": "structured",
+      "observed": false,
+      "license": "Excluded: first-party, control-plane, UI, or rendering transport",
+      "attribution": "Excluded from the external-provider count: not an ingested upstream dataset.",
+      "status": "excluded"
     },
     {
       "host": "techcabal.com",
@@ -10031,9 +10079,6 @@
         },
         {
           "path": "server/worldmonitor/infrastructure/v1/reverse-geocode.ts"
-        },
-        {
-          "path": "src/app/panel-layout.ts"
         },
         {
           "path": "src/bootstrap/web-vitals-utils.ts"
