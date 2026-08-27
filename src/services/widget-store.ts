@@ -1,7 +1,7 @@
 import { loadFromStorage, saveToStorage } from '@/utils';
 import { clearPanelColSpanEntry, clearPanelSpanEntry } from '@/utils/panel-storage';
 import { getAuthState } from '@/services/auth-state';
-import { isEntitled, getEntitlementState } from '@/services/entitlements';
+import { getEntitlementState } from '@/services/entitlements';
 import {
   clearLegacyKeyStorage,
   migrateLegacyKeysToHttpOnlySession,
@@ -234,12 +234,7 @@ export function isProWidgetEnabled(): boolean {
 }
 
 export function isProUser(): boolean {
-  return (
-    isWidgetFeatureEnabled() ||
-    isProWidgetEnabled() ||
-    getAuthState().user?.role === 'pro' ||
-    isEntitled()
-  );
+  return true;
 }
 
 /**

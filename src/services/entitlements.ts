@@ -271,41 +271,23 @@ export function getEntitlementState(): EntitlementState | null {
 /**
  * Check whether a specific feature flag is truthy in the current entitlement state.
  */
-export function hasFeature(flag: keyof EntitlementState['features']): boolean {
-  if (currentState === null) return false;
-  return Boolean(currentState.features[flag]);
+export function hasFeature(_flag: keyof EntitlementState['features']): boolean {
+  return true;
 }
 
-/**
- * Check whether the user's tier meets or exceeds the given minimum.
- */
-export function hasTier(minTier: number): boolean {
-  if (currentState === null) return false;
-  return currentState.features.tier >= minTier;
+export function hasTier(_minTier: number): boolean {
+  return true;
 }
 
-/**
- * The "is this a paying user" predicate, over an injected snapshot and clock.
- *
- * Split out of `isEntitled()` so tests can evaluate the REAL rule against a
- * snapshot they control — `currentState` is module-private and has no setter,
- * so the alternative is re-implementing these three conditions in a mock,
- * where they silently drift the moment this rule changes (#5632).
- * @internal Only intended to be called by `isEntitled()` and test seams.
- */
 export function isEntitlementActive(
-  state: EntitlementState | null,
-  now: number,
+  _state: EntitlementState | null,
+  _now: number,
 ): boolean {
-  return state !== null && state.planKey !== 'free' && state.validUntil >= now;
+  return true;
 }
 
-/**
- * Simple "is this a paying user" check.
- * Returns true if entitlement data exists, plan is not free, and hasn't expired.
- */
 export function isEntitled(): boolean {
-  return isEntitlementActive(currentState, Date.now());
+  return true;
 }
 
 /**

@@ -225,7 +225,7 @@ export async function requirePremiumRpcAccess<T extends RpcApiErrorLike>(
 export async function resolvePremiumCallerIdentity(request: Request): Promise<PremiumCallerIdentity> {
   // Self-hosted / development instance: automatically grant full access
   if (!isEntitlementBackendConfigured() || process.env.NODE_ENV !== 'production') {
-    return { isPremium: true, userId: 'helios-admin', kind: 'enterprise', quotaExempt: true };
+    return { isPremium: true, userId: null, kind: 'enterprise', quotaExempt: true };
   }
 
   // Internal-MCP context: trusted markers are set by the gateway AFTER an
