@@ -2,6 +2,19 @@
 @import './panels.css';
 @import './route-explorer.css';
 
+@font-face {
+  font-family: 'Homeric';
+  src: url('/fonts/Homeric.woff2') format('woff2'),
+       url('/fonts/Homeric.otf') format('opentype'),
+       url('/fonts/Homeric.ttf') format('truetype'),
+       url('/fonts/homeric.woff2') format('woff2'),
+       url('/fonts/homeric.otf') format('opentype'),
+       url('/fonts/homeric.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ============================================================
    Theme Colors — overridden by [data-theme="light"] below
    ============================================================ */
@@ -56,8 +69,8 @@
 
   /* Font stack */
   --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', 'Fira Code', 'DejaVu Sans Mono', 'Liberation Mono', monospace;
-  --font-brand: 'Cinzel Decorative', 'Cinzel', 'Marcellus', Georgia, serif;
-  --font-heading: 'Cinzel', 'Marcellus', Georgia, serif;
+  --font-brand: 'Homeric', 'Cinzel Decorative', 'Cinzel', 'Marcellus', Georgia, serif;
+  --font-heading: 'Homeric', 'Cinzel', 'Marcellus', Georgia, serif;
   /* Base body font, controlled by font preference (mono vs system) */
   --font-body-base: var(--font-mono);
   /* Effective body font used throughout the app */
