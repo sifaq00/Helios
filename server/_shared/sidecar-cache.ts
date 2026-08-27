@@ -36,9 +36,7 @@ function startSweepIfNeeded(): void {
     }
   }, SWEEP_INTERVAL_MS);
   // Don't hold the process open
-  if (typeof sweepTimer === 'object' && 'unref' in sweepTimer) {
-    sweepTimer.unref();
-  }
+  (sweepTimer as unknown as { unref?: () => void })?.unref?.();
 }
 
 function evictLRU(incomingSize = 0): void {
