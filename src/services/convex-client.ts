@@ -500,7 +500,11 @@ export function __setConvexClientFactoryForTests(
 export async function getConvexApi(): Promise<ConvexApi | null> {
   if (apiRef) return apiRef;
 
-  const { api } = await import('../../convex/_generated/api');
-  apiRef = api;
-  return apiRef;
+  try {
+    const { api } = await import('../../convex/_generated/api');
+    apiRef = api;
+    return apiRef;
+  } catch {
+    return null;
+  }
 }
