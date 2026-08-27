@@ -1,6 +1,12 @@
 {
-  "buildCommand": "npm run build:full",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "ignoreCommand": "bash scripts/vercel-ignore.sh",
+  "functions": {
+    "api/**": {
+      "excludeFiles": "{api/**,server/**}"
+    }
+  },
   "crons": [],
   "redirects": [
     { "source": "/", "has": [{ "type": "host", "value": "^(?:tech|finance|commodity|happy|energy)\\.worldmonitor\\.app$" }], "missing": [{ "type": "query", "key": "mode", "value": "agent" }], "destination": "/dashboard", "permanent": true },

@@ -19,11 +19,6 @@ target/
 # Common local artifacts
 .DS_Store
 
-# Helios Hobby: deploy as static SPA, proxy api to worldmonitor prod (0 functions <12)
-# Vercel Hobby limit 12 serverless functions, helios has 200 api files → Error.
-# Ignore all api functions, frontend will proxy /api/* to https://api.worldmonitor.app
-api/
-
 # Never deploy api test files: every non-underscore file under api/ becomes a
 # live serverless function, and a deployed *.test.mjs executes its whole
 # node:test suite (production env + Sentry) on every request (WORLDMONITOR-VD).
