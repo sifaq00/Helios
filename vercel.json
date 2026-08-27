@@ -6,7 +6,6 @@
   "env": {
     "VITE_WS_API_URL": "https://api.worldmonitor.app"
   },
-  "functions": {},
   "crons": [],
   "redirects": [
     { "source": "/", "has": [{ "type": "host", "value": "^(?:tech|finance|commodity|happy|energy)\\.worldmonitor\\.app$" }], "missing": [{ "type": "query", "key": "mode", "value": "agent" }], "destination": "/dashboard", "permanent": true },
