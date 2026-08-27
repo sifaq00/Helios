@@ -56,6 +56,8 @@
 
   /* Font stack */
   --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', 'Fira Code', 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+  --font-brand: 'Cinzel Decorative', 'Cinzel', 'Marcellus', Georgia, serif;
+  --font-heading: 'Cinzel', 'Marcellus', Georgia, serif;
   /* Base body font, controlled by font preference (mono vs system) */
   --font-body-base: var(--font-mono);
   /* Effective body font used throughout the app */
@@ -658,17 +660,19 @@ canvas,
 }
 
 .logo {
-  font-weight: bold;
-  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
-  letter-spacing: 2px;
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: calc(16px * var(--wm-panel-effective-scale, 1));
+  letter-spacing: 3px;
   color: var(--accent);
 }
 
 .logo-mobile {
   display: none;
-  font-weight: bold;
-  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
-  letter-spacing: 2px;
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: calc(15px * var(--wm-panel-effective-scale, 1));
+  letter-spacing: 2.5px;
   color: var(--accent);
 }
 
@@ -1610,11 +1614,11 @@ canvas,
   flex-direction: column;
 }
 .site-footer-name {
-  font-family: var(--font-mono, monospace);
-  font-size: calc(12px * var(--wm-panel-effective-scale, 1));
-  font-weight: 600;
+  font-family: var(--font-brand);
+  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
+  font-weight: 800;
   color: var(--text);
-  letter-spacing: 1px;
+  letter-spacing: 2.5px;
 }
 .site-footer-sub {
   font-family: var(--font-mono, monospace);
@@ -2059,10 +2063,11 @@ body.panel-resize-active iframe {
 }
 
 .panel-title {
+  font-family: var(--font-heading);
   font-size: calc(11px * var(--wm-panel-effective-scale, 1));
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -14434,9 +14439,10 @@ a.prediction-link:hover {
 }
 
 .mobile-menu-title {
-  font-weight: bold;
-  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
-  letter-spacing: 2px;
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: calc(16px * var(--wm-panel-effective-scale, 1));
+  letter-spacing: 3px;
   color: var(--accent);
 }
 
