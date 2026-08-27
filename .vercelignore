@@ -25,7 +25,8 @@ target/
 # Guarded by tests/deploy-config.test.mjs.
 api/**/*.test.mjs
 
-# Helios Hobby: api/ and server/ needed for build (inventory:facts) but not deployed
+# Helios Hobby: /api/ and /server/ needed for build pre-steps but not deployed
 # installCommand skips postinstall, buildCommand generates needed files before vite build
-api/
-server/
+# Use /api/ (root-only) to NOT match docs/api/ or other nested api/ dirs
+/server/
+/api/
