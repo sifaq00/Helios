@@ -384,7 +384,7 @@ export class MLWorkerManager {
         }
       })();
     }, delay);
-    this.recoveryTimer.unref?.();
+    (this.recoveryTimer as unknown as { unref?: () => void })?.unref?.();
   }
 
   private scheduleRecoveryBudgetReset(): void {
@@ -396,7 +396,7 @@ export class MLWorkerManager {
         this.recoveryBlocked = false;
       }
     }, this.recoveryStableMs);
-    this.recoveryResetTimer.unref?.();
+    (this.recoveryResetTimer as unknown as { unref?: () => void })?.unref?.();
   }
 
   private clearRecoveryTimer(): void {
