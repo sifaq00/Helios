@@ -2,10 +2,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "ignoreCommand": "bash scripts/vercel-ignore.sh",
-  "functions": {
-    "api/**": {
-      "excludeFiles": "{api/**,server/**}"
-    }
+  "env": {
+    "VITE_WS_API_URL": "https://api.worldmonitor.app"
   },
   "crons": [],
   "redirects": [
@@ -68,7 +66,6 @@
     { "source": "/stocks/:symbol/", "destination": "/stocks/:symbol", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://api.worldmonitor.app/api/$1" },
     { "source": "/robots.txt", "has": [{ "type": "host", "value": "^(?:tech|finance|commodity|happy|energy)\\.worldmonitor\\.app$" }], "destination": "/robots.variant.txt" },
     { "source": "/robots.txt", "has": [{ "type": "host", "value": "^api\\.worldmonitor\\.app$" }], "destination": "/robots.api.txt" },
     { "source": "/robots.txt", "destination": "/robots.www.txt" },
