@@ -2,19 +2,6 @@
 @import './panels.css';
 @import './route-explorer.css';
 
-@font-face {
-  font-family: 'Homeric';
-  src: url('/fonts/Homeric.woff2') format('woff2'),
-       url('/fonts/Homeric.otf') format('opentype'),
-       url('/fonts/Homeric.ttf') format('truetype'),
-       url('/fonts/homeric.woff2') format('woff2'),
-       url('/fonts/homeric.otf') format('opentype'),
-       url('/fonts/homeric.ttf') format('truetype');
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ============================================================
    Theme Colors — overridden by [data-theme="light"] below
    ============================================================ */
@@ -69,8 +56,6 @@
 
   /* Font stack */
   --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', 'Fira Code', 'DejaVu Sans Mono', 'Liberation Mono', monospace;
-  --font-brand: 'Homeric', 'Cinzel Decorative', 'Cinzel', 'Marcellus', Georgia, serif;
-  --font-heading: 'Homeric', 'Cinzel', 'Marcellus', Georgia, serif;
   /* Base body font, controlled by font preference (mono vs system) */
   --font-body-base: var(--font-mono);
   /* Effective body font used throughout the app */
@@ -673,19 +658,17 @@ canvas,
 }
 
 .logo {
-  font-family: var(--font-brand);
-  font-weight: 800;
-  font-size: calc(16px * var(--wm-panel-effective-scale, 1));
-  letter-spacing: 3px;
+  font-weight: bold;
+  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
+  letter-spacing: 2px;
   color: var(--accent);
 }
 
 .logo-mobile {
   display: none;
-  font-family: var(--font-brand);
-  font-weight: 800;
-  font-size: calc(15px * var(--wm-panel-effective-scale, 1));
-  letter-spacing: 2.5px;
+  font-weight: bold;
+  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
+  letter-spacing: 2px;
   color: var(--accent);
 }
 
@@ -1627,11 +1610,11 @@ canvas,
   flex-direction: column;
 }
 .site-footer-name {
-  font-family: var(--font-brand);
-  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
-  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  font-size: calc(12px * var(--wm-panel-effective-scale, 1));
+  font-weight: 600;
   color: var(--text);
-  letter-spacing: 2.5px;
+  letter-spacing: 1px;
 }
 .site-footer-sub {
   font-family: var(--font-mono, monospace);
@@ -2076,11 +2059,10 @@ body.panel-resize-active iframe {
 }
 
 .panel-title {
-  font-family: var(--font-heading);
   font-size: calc(11px * var(--wm-panel-effective-scale, 1));
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
+  letter-spacing: 1px;
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -14452,10 +14434,9 @@ a.prediction-link:hover {
 }
 
 .mobile-menu-title {
-  font-family: var(--font-brand);
-  font-weight: 800;
-  font-size: calc(16px * var(--wm-panel-effective-scale, 1));
-  letter-spacing: 3px;
+  font-weight: bold;
+  font-size: calc(14px * var(--wm-panel-effective-scale, 1));
+  letter-spacing: 2px;
   color: var(--accent);
 }
 
