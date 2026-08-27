@@ -98,7 +98,7 @@
     "gen:openapi:async-jobs": "node scripts/openapi-inject-async-jobs.mjs",
     "gen:openapi:china-decision-signals": "node scripts/openapi-inject-china-decision-signals.mjs",
     "build:agent-skills": "node scripts/build-agent-skills-index.mjs",
-    "build:vercel": "node --import tsx scripts/generate-product-config.mjs && npm run build:openapi && npm run build:agent-skills && npm --prefix blog-site ci --prefer-offline && npm run build:blog:raw && npm run build:pro && node scripts/source-attribution.mjs --write && npm run build:crawlable-corpus && npm run build:sitemap && vite build",
+    "build:vercel": "node --import tsx scripts/generate-product-config.mjs && npm run build:openapi && npm run build:agent-skills && npm --prefix blog-site ci --prefer-offline && npm run build:blog:raw && npm run build:pro && (node scripts/source-attribution.mjs --write --retire agentskills.io || true) && npm run build:crawlable-corpus && npm run build:sitemap && vite build",
     "prebuild": "npm run product:facts && npm run build:openapi && npm run build:agent-skills",
     "build": "npm run security:vite-env-secrets -- --strict-local && npm run build:blog:raw && npm run build:pro && npm run build:crawlable-corpus && npm run build:sitemap && tsc && vite build",
     "build:sidecar-sebuf": "node scripts/build-sidecar-sebuf.mjs",
