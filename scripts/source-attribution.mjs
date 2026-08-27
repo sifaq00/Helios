@@ -757,6 +757,24 @@ const PROVIDER_OVERRIDES = {
     attribution: 'Excluded from the external-provider count: first-party web origin.',
     status: 'excluded',
   },
+  'helios.app': {
+    provider: 'Helios web app',
+    license: 'Excluded: Helios own web application',
+    attribution: 'Excluded from the external-provider count: first-party web origin.',
+    status: 'excluded',
+  },
+  'www.helios.app': {
+    provider: 'Helios web app',
+    license: 'Excluded: Helios own web application',
+    attribution: 'Excluded from the external-provider count: first-party web origin.',
+    status: 'excluded',
+  },
+  'api.helios.app': {
+    provider: 'Helios hosted API',
+    license: 'Excluded: Helios own service/control plane',
+    attribution: 'Excluded from the external-provider count: first-party API endpoint.',
+    status: 'excluded',
+  },
   'chatgpt.com': {
     provider: 'ChatGPT link',
     license: 'Excluded: documentation/UI link',
@@ -820,13 +838,13 @@ const PROVIDER_OVERRIDES = {
 // a provider-bearing override a separate, explicit lifecycle event instead of
 // something `--write` can silently normalize into the manifest.
 export const PROVIDER_IDENTITY_REVIEW = Object.freeze({
-  sha256: 'a7ab631b0e17d681791f6978832fb0a8c4f8567bfa1c90d9e79a747b5a7dfbfe',
-  reason: 'Keep Toronto Police Service C4S live-dispatch on services.arcgis.com distinct from Toronto Police Service Open Data on data.tps.ca and www.tps.ca, so live CAD is not catalogued as Open Data / geopolitics.',
+  sha256: 'ffe1e84353e0a0dbc15bd6691a77baa13b6009580a6b75fdc340b704372778e1',
+  reason: 'Keep Toronto Police Service C4S live-dispatch on services.arcgis.com distinct from Toronto Police Service Open Data on data.tps.ca and www.tps.ca, so live CAD is not catalogued as Open Data / geopolitics. + Helios rebrand: add helios.app/www/api first-party exclusions mirroring worldmonitor.app.',
   // A URL cited here is scanned like any other: this file sits inside
   // SOURCE_ROOTS, so citing a host that is not already a registered source
   // invents a provider row for it. The B.C. catalogue URLs above are safe
   // because that host is itself an observed source; parallel.ai is not.
-  reviewReference: 'Issues #7012 and #6682 Toronto safety sources; plus Issue #7000 publisher-centric source catalog; plus Issue #7001, Issue #6437, Issue #6622, Issue #6659, and PR #6447 identity reviews.',
+  reviewReference: 'Issues #7012 and #6682 Toronto safety sources; plus Issue #7000 publisher-centric source catalog; plus Issue #7001, Issue #6437, Issue #6622, Issue #6659, and PR #6447 identity reviews; Helios rebrand helios.app.',
 });
 
 export function providerIdentityDigest(providerOverrides = PROVIDER_OVERRIDES) {
@@ -1139,7 +1157,12 @@ function overrideFor(observed) {
   const presentationOnly = observed.references.length > 0
     && observed.references.every((reference) => PRESENTATION_ONLY_FILES.has(reference.path));
   if (presentationOnly) return { provider: observed.host, ...GENERATED_EXCLUSIONS[0] };
-  if (EXCLUDED_HOSTS.has(observed.host) || observed.host.endsWith('.worldmonitor.app')) {
+  if (
+    EXCLUDED_HOSTS.has(observed.host) ||
+    observed.host.endsWith('.worldmonitor.app') ||
+    observed.host.endsWith('.helios.app') ||
+    observed.host === 'helios.app'
+  ) {
     return { provider: observed.host, ...GENERATED_EXCLUSIONS[1] };
   }
   return {};

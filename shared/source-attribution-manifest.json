@@ -4780,6 +4780,20 @@
       ]
     },
     {
+      "host": "helios.app",
+      "provider": "Helios web app",
+      "kind": "structured",
+      "observed": true,
+      "license": "Excluded: Helios own web application",
+      "attribution": "Excluded from the external-provider count: first-party web origin.",
+      "status": "excluded",
+      "references": [
+        {
+          "path": "src/config/variant-meta.ts"
+        }
+      ]
+    },
+    {
       "host": "hiiraan.com",
       "provider": "hiiraan.com",
       "kind": "feed",
@@ -14029,9 +14043,6 @@
         },
         {
           "path": "src/components/RuntimeConfigPanel.ts"
-        },
-        {
-          "path": "src/config/variant-meta.ts"
         },
         {
           "path": "src/embed/embed-url.ts"
