@@ -44,6 +44,14 @@ import { REPOSITORY, readArgument } from './railway-cli.mjs';
 // The workflows this monitor speaks for, keyed by workflow FILE (stable) with
 // the display name for humans. Each must be a push-to-main deployer that the
 // deploy gate cannot see.
+//
+// FORK NOTE (sifaq00/Helios is Vercel-only): the upstream list also watched
+// deploy-railway-reconcile-control.yml and deploy-worker.yml, but this fork
+// has no Cloudflare/Railway secrets, so those deploys fail permanently at
+// "Set control-plane secrets" and the monitor re-alarmed on the same stale
+// failures every 10-minute tick (inbox flood). They are intentionally NOT
+// monitored here. If that infra is ever wired up, re-add entries in the same
+// shape as the Convex one below.
 export const MONITORED_WORKFLOWS = Object.freeze([
   Object.freeze({
     file: 'convex-deploy.yml',
@@ -56,49 +64,12 @@ export const MONITORED_WORKFLOWS = Object.freeze([
     skipProofPath: 'convex/',
     // Convex Deploy fires on EVERY push to main (no path filter; the changes
     // job decides whether to deploy). So "no run in the window"
-    // means "no merge to main in the window". The observed max gap across the
-    // last 100 completed runs is ~5 days (quiet weekend), so 7 days is the
-    // backstop for a workflow that stopped firing at all.
-    noRunWindowMs: 7 * 24 * 60 * 60 * 1000,
-  }),
-  Object.freeze({
-    file: 'deploy-railway-reconcile-control.yml',
-    displayName: 'Deploy Railway Reconcile Control',
-    // The YAML key is `deploy` but the job carries `name: Wrangler deploy`,
-    // which is what the jobs API returns.
-    deployJobName: 'Wrangler deploy',
-    // The workflow's own path filter covers workers/railway-reconcile-control/**
-    // plus its own file and test. A push touching ONLY those paths must
-    // deploy; a deploy job skipped there is an unexpected skip, which alarms.
-    skipProofPath: null,
-    triggerPaths: Object.freeze([
-      'workers/railway-reconcile-control/**',
-      '.github/workflows/deploy-railway-reconcile-control.yml',
-      'tests/deploy-railway-reconcile-control-workflow.test.mjs',
-    ]),
-    // Path-filtered and rare: the Worker is dormant control-plane infra and a
-    // healthy stretch with no matching push is ordinary. Every tick proves
-    // whether a deploy was due from the trigger-path tree diff; this window
-    // only marks an active run as stuck and labels an old baseline.
-    noRunWindowMs: 14 * 24 * 60 * 60 * 1000,
-  }),
-  Object.freeze({
-    file: 'deploy-worker.yml',
-    displayName: 'Deploy api-cors-preflight Worker',
-    deployJobName: 'Wrangler deploy',
-    // Same shape: path-filtered push-to-main, no gate anywhere. A missing
-    // CLOUDFLARE_API_TOKEN fails it silently like the reconcile Worker's
-    // missing secrets did.
-    skipProofPath: null,
-    triggerPaths: Object.freeze([
-      'workers/api-cors-preflight/**',
-      'api/_bootstrap-public-tier.js',
-      '.github/workflows/deploy-worker.yml',
-    ]),
-    // Same dormant reasoning as the reconcile Worker: a healthy run can be
-    // weeks apart, so the trigger-path tree — not age — decides whether a
-    // deploy is due.
-    noRunWindowMs: 14 * 24 * 60 * 60 * 1000,
+    // means "no merge to main in the window". The upstream backstop was 7
+    // days against an observed ~5-day max gap — but this fork can go weeks
+    // without a push, and the 7-day window mistook quiet for broken
+    // (false NO_RUN_IN_WINDOW alarm). 30 days matches fork cadence while
+    // still catching a workflow that genuinely stopped firing.
+    noRunWindowMs: 30 * 24 * 60 * 60 * 1000,
   }),
 ]);
 
@@ -496,10 +467,7 @@ export function judgeWorkflow({ workflow, run, jobs, skipProof, deploymentRequir
   // deploy job in the listing reads as failure, not as healthy.
   //
   // The deploy job's name is not one string. convex-deploy.yml names its job
-  // `deploy`; deploy-railway-reconcile-control.yml and deploy-worker.yml give
-  // it a display name (`Wrangler deploy`, `Live control-plane smoke`) while
-  // keeping the `deploy` id as the YAML key. The jobs API returns the display
-  // name, so each workflow declares the deploy job name the API actually
+  // `deploy`; each workflow declares the deploy job name the API actually
   // publishes via `deployJobName`.
   const deployName = workflow.deployJobName ?? 'deploy';
   const deployJobs = [...(jobs?.entries() ?? [])].filter(([name]) => name === deployName);

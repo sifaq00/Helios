@@ -56,21 +56,53 @@ function jobsPayload(jobs) {
 }
 
 const CONVEX = MONITORED_WORKFLOWS.find((workflow) => workflow.file === 'convex-deploy.yml');
-const RECONCILE = MONITORED_WORKFLOWS.find((workflow) => workflow.file === 'deploy-railway-reconcile-control.yml');
-const WORKER = MONITORED_WORKFLOWS.find((workflow) => workflow.file === 'deploy-worker.yml');
+// Fork fixtures: sifaq00/Helios is Vercel-only, so the Railway/Worker deploy
+// workflows are NOT monitored (no Cloudflare/Railway secrets on the fork).
+// They survive here as frozen fixtures so the generic-logic tests below keep
+// exercising path-filtered configs without depending on the live list.
+const RECONCILE = Object.freeze({
+  file: 'deploy-railway-reconcile-control.yml',
+  displayName: 'Deploy Railway Reconcile Control',
+  deployJobName: 'Wrangler deploy',
+  skipProofPath: null,
+  triggerPaths: Object.freeze([
+    'workers/railway-reconcile-control/**',
+    '.github/workflows/deploy-railway-reconcile-control.yml',
+    'tests/deploy-railway-reconcile-control-workflow.test.mjs',
+  ]),
+  noRunWindowMs: 14 * 24 * 60 * 60 * 1000,
+});
+const WORKER = Object.freeze({
+  file: 'deploy-worker.yml',
+  displayName: 'Deploy api-cors-preflight Worker',
+  deployJobName: 'Wrangler deploy',
+  skipProofPath: null,
+  triggerPaths: Object.freeze([
+    'workers/api-cors-preflight/**',
+    'api/_bootstrap-public-tier.js',
+    '.github/workflows/deploy-worker.yml',
+  ]),
+  noRunWindowMs: 14 * 24 * 60 * 60 * 1000,
+});
 
 describe('post-merge deploy monitor', () => {
   it('monitors every push-to-main deployer that the deploy gate cannot see', () => {
+    // Vercel-only fork: Convex is the only post-merge deployer with live
+    // infra. The Railway/Worker deployers were removed from the live list
+    // (missing secrets, never green on the fork); the monitor must not
+    // re-alarm on their stale failures every tick.
     assert.deepEqual(
       MONITORED_WORKFLOWS.map((workflow) => workflow.file),
       [
         'convex-deploy.yml',
-        'deploy-railway-reconcile-control.yml',
-        'deploy-worker.yml',
       ],
     );
-    // The gate's aggregated workflows are the four PR workflows; these three
-    // must not be among them (they are push-only and cannot gate a PR). The
+    // The quiet-fork backstop: Convex fires on every push to main, and this
+    // fork can go weeks without a push. The upstream 7-day window mistook
+    // quiet for broken; 30 days matches fork cadence.
+    assert.equal(CONVEX.noRunWindowMs, 30 * 24 * 60 * 60 * 1000);
+    // The gate's aggregated workflows are the four PR workflows; this one
+    // must not be among them (it is push-only and cannot gate a PR). The
     // convex-deploy changes job deliberately shares no name with test.yml's
     // (see convex-deploy.yml:37-42), so none of the names collide either.
     for (const workflow of MONITORED_WORKFLOWS) {
@@ -454,52 +486,44 @@ describe('post-merge deploy monitor', () => {
     ]);
   });
 
-  it('proves a stale path-filtered deploy against current main before reporting healthy', () => {
-    const deployedHead = '9'.repeat(40);
+  it('proves a skipped convex deploy against the head diff before reporting healthy', () => {
     const gitCalls = [];
     const gh = (args) => {
       const joined = args.join(' ');
       const runsMatch = joined.match(/workflows\/([^/]+)\/runs/);
       if (runsMatch) {
-        const stale = runsMatch[1] === 'deploy-worker.yml';
         return JSON.stringify({
           workflow_runs: [{
-            id: stale ? 700 : 701,
-            created_at: new Date(NOW - (stale ? 15 * 24 * HOUR : HOUR)).toISOString(),
+            id: 700,
+            created_at: new Date(NOW - HOUR).toISOString(),
             conclusion: 'success',
             run_attempt: 1,
-            head_sha: stale ? deployedHead : '8'.repeat(40),
+            head_sha: '8'.repeat(40),
             event: 'push',
             display_title: 'push',
           }],
         });
       }
       return jobsPayload([
-        { name: 'deploy', conclusion: 'success', status: 'completed' },
-        { name: 'Wrangler deploy', conclusion: 'success', status: 'completed' },
+        { name: 'deploy', conclusion: 'skipped', status: 'completed' },
       ]);
     };
 
     const results = checkPostmergeDeploys({
       repository: 'koala73/worldmonitor',
       gh,
-      git: (args) => { gitCalls.push(args); return ''; },
+      git: (args) => {
+        gitCalls.push(args);
+        return args[0] === 'rev-parse' ? `${'9'.repeat(40)}\n` : '';
+      },
       now: NOW,
     });
 
-    const worker = results.find((entry) => entry.workflow === 'deploy-worker.yml');
-    assert.equal(worker.state, 'OK');
-    assert.equal(worker.verdict, 'DEPLOY_NOT_DUE');
-    assert.equal(gitCalls.length, 2, 'both path-filtered workflows require current-tree proof');
-    const workerDiff = gitCalls.find((args) => args.includes('workers/api-cors-preflight/**'));
-    assert.deepEqual(workerDiff, [
-      'diff',
-      '--name-only',
-      deployedHead,
-      'origin/main',
-      '--',
-      ...WORKER.triggerPaths,
-    ]);
+    assert.equal(results.length, 1);
+    assert.equal(results[0].workflow, 'convex-deploy.yml');
+    assert.equal(results[0].state, 'OK');
+    assert.equal(results[0].verdict, 'DEPLOY_SKIPPED_LEGIT');
+    assert.ok(gitCalls.length >= 2, 'the convex=false skip must be proven against the head diff');
   });
 
   it('honours the no-run window as a boundary, not a race', () => {
@@ -655,6 +679,28 @@ describe('post-merge deploy monitor — read-path resilience (#6479)', () => {
   });
 
   describe('one unreadable workflow does not silence the others', () => {
+    // A gh stub for a success run whose deploy job was skipped: exercises the
+    // convex=false skip-proof path. The git stub is injected per test.
+    function skippedDeployGh(args) {
+      const joined = args.join(' ');
+      if (joined.match(/workflows\/[^/]+\/runs/)) {
+        return JSON.stringify({
+          workflow_runs: [{
+            id: 710,
+            created_at: new Date(NOW - HOUR).toISOString(),
+            conclusion: 'success',
+            run_attempt: 1,
+            head_sha: 'a'.repeat(40),
+            event: 'push',
+            display_title: 'push',
+          }],
+        });
+      }
+      return jobsPayload([
+        { name: 'deploy', conclusion: 'skipped', status: 'completed' },
+      ]);
+    }
+
     // A gh stub for the whole fleet: healthy deploys everywhere, except the
     // workflow named in `unreadable`, whose run listing throws.
     function ghFleet({ unreadable }) {
@@ -756,23 +802,25 @@ describe('post-merge deploy monitor — read-path resilience (#6479)', () => {
     });
 
     it('fails the monitor for git and GitHub 4xx throws, not only for deploy ALARMs', () => {
-      const gitThrow = checkPostmergeDeploys({
-        repository: 'koala73/worldmonitor',
-        gh: ghFleet({}),
-        git: (args) => {
-          throw new Error(`git ${args.join(' ')} failed (128): not a tree`);
-        },
-        now: NOW,
-      });
-      const proofFailed = gitThrow.filter((entry) => entry.verdict === 'READ_UNPROVEN');
-      assert.ok(proofFailed.length >= 1, 'path-filtered workflows must ALARM when git cannot prove the trigger tree');
-      for (const entry of proofFailed) {
-        assert.equal(entry.state, 'ALARM');
-        assert.match(entry.detail, /not a tree/);
-      }
-      const gitSummary = summarizeResults(gitThrow);
-      assert.equal(gitSummary.exitCode, 1);
-      assert.match(gitSummary.lines.join('\n'), /could not prove|READ_UNPROVEN/);
+    // The convex=false skip must be proven against the head diff: a git
+    // failure while proving it is an unproven skip, which alarms.
+    const gitThrow = checkPostmergeDeploys({
+      repository: 'koala73/worldmonitor',
+      gh: skippedDeployGh,
+      git: (args) => {
+        throw new Error(`git ${args.join(' ')} failed (128): not a tree`);
+      },
+      now: NOW,
+    });
+    const unproven = gitThrow.filter((entry) => entry.verdict === 'DEPLOY_SKIPPED_UNPROVEN');
+    assert.equal(unproven.length, 1, 'an unprovable convex=false skip must ALARM');
+    for (const entry of unproven) {
+      assert.equal(entry.state, 'ALARM');
+      assert.match(entry.detail, /could not be proven against the head diff/);
+    }
+    const gitSummary = summarizeResults(gitThrow);
+    assert.equal(gitSummary.exitCode, 1);
+    assert.match(gitSummary.lines.join('\n'), /did not deploy|DEPLOY_SKIPPED_UNPROVEN/);
 
       const gh = ghFleet({ unreadable: 'convex-deploy.yml' });
       const answered = checkPostmergeDeploys({
@@ -854,13 +902,11 @@ describe('post-merge deploy monitor — read-path resilience (#6479)', () => {
       gitProcessError.code = 'EACCES';
       const results = checkPostmergeDeploys({
         repository: 'koala73/worldmonitor',
-        gh: ghFleet({}),
+        gh: skippedDeployGh,
         git: () => { throw gitProcessError; },
         now: NOW,
       });
-      const proofFailures = results.filter((entry) => entry.verdict === 'READ_UNPROVEN');
-      assert.ok(proofFailures.length > 0, 'a non-ENOENT git process failure must not become UNKNOWN');
-      assert.ok(proofFailures.every((entry) => entry.state === 'ALARM'));
+      assert.ok(results.every((entry) => entry.state === 'ALARM'), 'a non-ENOENT git process failure must not become UNKNOWN');
       assert.equal(summarizeResults(results).exitCode, 1);
     });
 
